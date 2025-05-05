@@ -1,0 +1,51 @@
+{
+  "name": "sol-fee-router",
+  "version": "0.1.0",
+  "description": "SDK for the Solana Fee Router Program",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig-build.json",
+    "clean": "rm -rf dist",
+    "test": "jest",
+    "prepare": "npm run clean && npm run build",
+    "example:create": "ts-node examples/create-router.ts",
+    "example:route": "ts-node examples/route-fees.ts",
+    "example:update": "ts-node examples/update-router.ts"
+  },
+  "keywords": [
+    "solana",
+    "blockchain",
+    "anchor",
+    "fee",
+    "router"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/sol-fee-router"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/sol-fee-router/issues"
+  },
+  "homepage": "https://github.com/yourusername/sol-fee-router#readme",
+  "files": [
+    "dist",
+    "*.json"
+  ],
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
+    "@solana/web3.js": "^1.89.1",
+    "bn.js": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.0",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.11.19",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

@@ -74,7 +74,7 @@ pub struct FeeDestination {
 }
 ```
 
-## 🚀 Usage
+## Usage
 
 ### Initialize a Router
 

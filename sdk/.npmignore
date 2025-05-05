@@ -1,0 +1,19 @@
+# Tests
+tests/
+coverage/
+jest.config.js
+
+# Source
+src/
+tsconfig.json
+.npmignore
+.gitignore
+
+# Examples
+examples/
+
+# Misc
+node_modules/
+.vscode/
+.idea/
+*.log
