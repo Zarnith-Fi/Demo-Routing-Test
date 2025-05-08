@@ -1,113 +1,123 @@
-# Fee Router SDK
+# zarnithfi-router
 
-A TypeScript SDK for interacting with the Solana Fee Router Program. This SDK simplifies the process of creating, managing, and using a fee routing system on Solana, allowing developers to easily distribute SOL to multiple addresses based on percentage splits.
+[![npm version](https://img.shields.io/npm/v/zarnithfi-router.svg)](https://www.npmjs.com/package/zarnithfi-router)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A TypeScript SDK for interacting with the ZarnithFi Fee Router program on Solana. Distribute SOL to multiple destinations based on predefined percentage splits.
 
 ## Features
 
-- Create new routers with destinations and percentage splits
-- Update destinations for existing routers
-- Route SOL to multiple destinations according to configured percentages
-- Close router accounts and reclaim rent
-- Helper functions for SOL/lamports and percentage/basis points conversions
-- Simple, intuitive API with TypeScript support
+- Create fee routers with customizable destination addresses and percentage splits
+- Route SOL to multiple destinations in a single transaction
+- Update destination addresses and percentage splits anytime
+- Secure fee distribution with on-chain validation
+- Easy-to-use TypeScript interfaces with full type safety
 
 ## Installation
 
 ```bash
-npm install sol-fee-router
+npm install zarnithfi-router
+```
+
+Or with yarn:
+
+```bash
+yarn add zarnithfi-router
 ```
 
 ## Usage
 
-### Initialize the SDK
+### Initializing the SDK
 
 ```typescript
-import { Connection, PublicKey } from '@solana/web3.js';
-import { RouterSDK } from 'sol-fee-router';
-import { useWallet } from '@solana/wallet-adapter-react'; // or your preferred wallet provider
+import { Connection, Keypair } from '@solana/web3.js';
+import { RouterSDK } from 'zarnithfi-router';
+
+// Set up connection and wallet
+const connection = new Connection('https://api.mainnet-beta.solana.com');
+const wallet = useWallet(); // Using Solana wallet adapter
 
 // Initialize the SDK
-const connection = new Connection("https://api.mainnet-beta.solana.com");
-const wallet = useWallet(); // Use your wallet adapter
 const routerSDK = new RouterSDK(connection, wallet);
 ```
 
-### Create a New Router
+### Creating a Router
 
 ```typescript
-// Define destinations and percentages (must sum to 100%)
+import { PublicKey } from '@solana/web3.js';
+
+// Define destinations with percentage splits (must total 100%)
 const destinations = [
   {
-    address: new PublicKey('...'), // Treasury
+    address: new PublicKey('Treasury_Address_Here'),
     percentage: 50 // 50%
   },
   {
-    address: new PublicKey('...'), // Development team
+    address: new PublicKey('Team_Address_Here'),
     percentage: 30 // 30%
   },
   {
-    address: new PublicKey('...'), // Marketing
+    address: new PublicKey('Marketing_Address_Here'),
     percentage: 20 // 20%
   }
 ];
 
-// Create the router
+// Create a router
 const signature = await routerSDK.createRouter(destinations);
 console.log(`Router created: ${signature}`);
 ```
 
-### Route SOL to Destinations
+### Routing SOL
 
 ```typescript
-// Get the router address for the current wallet
+// Get your router address
 const routerAddress = await routerSDK.getRouterAddress();
 
-// Route 1 SOL to the destinations
-const signature = await routerSDK.routeSolFees(routerAddress, 1); // 1 SOL
-console.log(`SOL routed: ${signature}`);
+// Route 1 SOL according to percentage splits
+const signature = await routerSDK.routeSolFees(routerAddress, 1);
+console.log(`SOL routed successfully: ${signature}`);
 ```
 
-### Update Router Destinations
+### Updating Destinations
 
 ```typescript
 // Define new destinations
 const newDestinations = [
   {
-    address: new PublicKey('...'),
+    address: new PublicKey('Treasury_Address_Here'),
     percentage: 40 // 40%
   },
   {
-    address: new PublicKey('...'),
+    address: new PublicKey('Team_Address_Here'),
     percentage: 40 // 40%
   },
   {
-    address: new PublicKey('...'),
+    address: new PublicKey('Marketing_Address_Here'),
     percentage: 20 // 20%
   }
 ];
 
-// Update the router destinations
+// Update router destinations
 const signature = await routerSDK.updateDestinations(routerAddress, newDestinations);
 console.log(`Router updated: ${signature}`);
 ```
 
-### Get Router Data
+### Getting Router Data
 
 ```typescript
 // Fetch router data
 const routerData = await routerSDK.getRouterData(routerAddress);
-
-console.log(`Router owner: ${routerData.owner.toString()}`);
+console.log('Router owner:', routerData.owner.toString());
 console.log('Destinations:');
 routerData.destinations.forEach(dest => {
   console.log(`  ${dest.address.toString()}: ${dest.percentage}%`);
 });
 ```
 
-### Close Router and Reclaim Rent
+### Closing a Router
 
 ```typescript
-// Close the router account
+// Close router and reclaim rent
 const signature = await routerSDK.closeRouter(routerAddress);
 console.log(`Router closed: ${signature}`);
 ```
@@ -116,7 +126,7 @@ console.log(`Router closed: ${signature}`);
 
 ### `RouterSDK`
 
-Main class for interacting with the Fee Router program.
+The main class for interacting with the Fee Router program.
 
 #### Constructor
 
@@ -128,75 +138,54 @@ constructor(
 )
 ```
 
-#### Static Methods
+#### Methods
 
-- `findRouterAddress(owner: PublicKey, programId?: PublicKey): Promise<PublicKey>`
-  Derives the router address for a given owner.
-
-#### Instance Methods
-
-- `createRouter(destinations: FeeDestinationInput[], options?: TransactionOptions): Promise<TransactionSignature>`
-  Creates a new router with destinations and percentage splits.
-
-- `updateDestinations(routerAddress: PublicKey, newDestinations: FeeDestinationInput[], options?: TransactionOptions): Promise<TransactionSignature>`
-  Updates destinations for an existing router.
-
-- `routeSolFees(routerAddress: PublicKey, amount: number, options?: TransactionOptions): Promise<TransactionSignature>`
-  Routes SOL to destinations according to percentages.
-
-- `closeRouter(routerAddress: PublicKey, options?: TransactionOptions): Promise<TransactionSignature>`
-  Closes router and reclaims rent.
-
+- `createRouter(destinations: FeeDestinationInput[], options?: TransactionOptions): Promise<string>`
+- `updateDestinations(routerAddress: PublicKey, newDestinations: FeeDestinationInput[], options?: TransactionOptions): Promise<string>`
+- `routeSolFees(routerAddress: PublicKey, amount: number, options?: TransactionOptions): Promise<string>`
+- `closeRouter(routerAddress: PublicKey, options?: TransactionOptions): Promise<string>`
 - `getRouterData(routerAddress: PublicKey): Promise<RouterData>`
-  Gets router data including destinations.
-
 - `routerExists(routerAddress: PublicKey): Promise<boolean>`
-  Checks if a router exists.
-
 - `getRouterAddress(): Promise<PublicKey>`
-  Gets the router address for the current wallet.
+- `static findRouterAddress(owner: PublicKey, programId?: PublicKey): Promise<PublicKey>`
 
-### Utility Functions
+### Types
 
-- `solToLamports(sol: number): BN`
-  Converts SOL to lamports.
+```typescript
+interface FeeDestinationInput {
+  address: PublicKey;
+  percentage: number; // 0-100
+}
 
-- `lamportsToSol(lamports: BN | number): number`
-  Converts lamports to SOL.
+interface RouterData {
+  owner: PublicKey;
+  destinations: {
+    address: PublicKey;
+    percentage: number; // 0-100
+  }[];
+}
 
-- `percentageToBasisPoints(percentage: number): number`
-  Converts percentage to basis points.
-
-- `basisPointsToPercentage(basisPoints: number): number`
-  Converts basis points to percentage.
-
-## Development
-
-### Building the SDK
-
-```bash
-# Install dependencies
-npm install
-
-# Build the SDK
-npm run build
+interface TransactionOptions {
+  commitment?: 'processed' | 'confirmed' | 'finalized';
+  preflightCommitment?: 'processed' | 'confirmed' | 'finalized';
+  skipPreflight?: boolean;
+  maxRetries?: number;
+}
 ```
 
-### Running Examples
+## Use Cases
 
-```bash
-# Create a router
-npm run example:create
+- Revenue sharing for protocols and DAOs
+- Automatic splitting of marketplace fees
+- Treasury management for teams
+- Royalty distribution for NFT projects
+- Automated payments to contributors
 
-# Route SOL
-npm run example:route
+## Requirements
 
-# Update router destinations
-npm run example:update
-
-# Close router
-npm run example:close
-```
+- Node.js 14+
+- Solana Web3.js 1.73.0+
+- Anchor 0.31.0+
 
 ## License
 

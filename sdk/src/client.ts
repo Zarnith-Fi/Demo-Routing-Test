@@ -27,7 +27,7 @@ import {
   } from './utils/conversion';
   
   // Import the IDL directly
-  const IDL = require('../test_router.json');
+  import { IDL } from './idl';
   
   /**
    * SDK for interacting with the Fee Router program

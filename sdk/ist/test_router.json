@@ -1,5 +1,5 @@
-// Define the IDL structure inline to avoid module resolution issues
-export const IDL = {
+
+{
     "version": "0.1.0",
     "name": "test_router",
     "address": "8dtNeFAukB4U7aoTZZrtWQ6S2cCUHoUcKmNyZJ9cKvTG",
@@ -109,27 +109,27 @@ export const IDL = {
       }
     ],
     "accounts": [
-      {
-        "name": "Router",
-        "type": {
-          "kind": "struct",
-          "fields": [
-            {
-              "name": "owner",
-              "type": "publicKey"
-            },
-            {
-              "name": "destinations",
-              "type": {
-                "vec": {
-                  "defined": "FeeDestination"
+        {
+          "name": "Router",
+          "type": {
+            "kind": "struct",
+            "fields": [
+              {
+                "name": "owner",
+                "type": "publicKey"
+              },
+              {
+                "name": "destinations",
+                "type": {
+                  "vec": {
+                    "defined": "FeeDestination"
+                  }
                 }
               }
-            }
-          ]
+            ]
+          }
         }
-      }
-    ],
+      ],
     "types": [
       {
         "name": "FeeDestination",
@@ -175,4 +175,4 @@ export const IDL = {
         "msg": "Destination account does not match address in router"
       }
     ]
-  };
+  }

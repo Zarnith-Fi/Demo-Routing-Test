@@ -1,19 +1,16 @@
-# Tests
+# Source files
+src/
+examples/
 tests/
-coverage/
+
+# Configuration files
+.gitignore
+tsconfig.json
+tsconfig-build.json
 jest.config.js
 
-# Source
-src/
-tsconfig.json
-.npmignore
-.gitignore
-
-# Examples
-examples/
-
-# Misc
-node_modules/
+# Other files
 .vscode/
 .idea/
+node_modules/
 *.log

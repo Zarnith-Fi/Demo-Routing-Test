@@ -3,13 +3,14 @@
       "target": "es2020",
       "module": "commonjs",
       "declaration": true,
-      "outDir": "./dist",
+      "outDir": "ist",
       "strict": true,
       "esModuleInterop": true,
+      "rootDir": "./src",
       "skipLibCheck": true,
       "forceConsistentCasingInFileNames": true,
       "resolveJsonModule": true
     },
     "include": ["src/**/*", "*.json"],
-    "exclude": ["node_modules", "dist", "tests"]
+    "exclude": ["node_modules", "ist", "tests"]
   }
